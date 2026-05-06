@@ -1,0 +1,408 @@
+{
+  "info": {
+    "_postman_id": "903ada79-5ae7-4c39-bff6-e4636e1d0141",
+    "name": "Tech Challenge - Usuarios",
+    "description": "Colecao Postman para os principais cenarios da API de usuarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54388025",
+    "_collection_link": "https://go.postman.co/collection/54388025-903ada79-5ae7-4c39-bff6-e4636e1d0141?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Cadastro de usuario valido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Joao Silva\",\n  \"endereco\": \"Rua das Flores, 123\",\n  \"email\": \"joao.silva@email.com\",\n  \"login\": \"joao.silva\",\n  \"senha\": \"senha123\",\n  \"tipoUsuario\": \"CLIENTE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Cadastra um usuario valido. Resposta esperada: 201 Created."
+      },
+      "response": []
+    },
+    {
+      "name": "Cadastro invalido - email duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Joao Silva Duplicado\",\n  \"endereco\": \"Rua das Flores, 999\",\n  \"email\": \"joao.silva@email.com\",\n  \"login\": \"joao.silva.duplicado\",\n  \"senha\": \"senha123\",\n  \"tipoUsuario\": \"CLIENTE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Tenta cadastrar outro usuario com e-mail ja existente. Resposta esperada: 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "Cadastro invalido - campos obrigatorios faltando",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"\",\n  \"endereco\": \"\",\n  \"email\": \"\",\n  \"login\": \"\",\n  \"senha\": \"\",\n  \"tipoUsuario\": null\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Envia campos obrigatorios vazios ou nulos. Resposta esperada: 400 Bad Request com ProblemDetail."
+      },
+      "response": []
+    },
+    {
+      "name": "Alteracao de senha com sucesso",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"senha\": \"novaSenha123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/{{usuarioId}}/senha",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "{{usuarioId}}",
+            "senha"
+          ]
+        },
+        "description": "Atualiza a senha usando o endpoint exclusivo. Resposta esperada: 204 No Content."
+      },
+      "response": []
+    },
+    {
+      "name": "Alteracao de senha com erro - usuario inexistente",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"senha\": \"novaSenha123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/999999/senha",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "999999",
+            "senha"
+          ]
+        },
+        "description": "Tenta alterar senha de usuario inexistente. Resposta esperada: 404 Not Found com ProblemDetail."
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizacao de dados do usuario com sucesso",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Joao Silva Atualizado\",\n  \"endereco\": \"Rua das Flores, 456\",\n  \"email\": \"joao.silva@email.com\",\n  \"login\": \"joao.silva\",\n  \"tipoUsuario\": \"DONO\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        },
+        "description": "Atualiza dados cadastrais usando endpoint distinto da troca de senha. Resposta esperada: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizacao de dados com erro - usuario inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Usuario Inexistente\",\n  \"endereco\": \"Rua Teste, 1\",\n  \"email\": \"inexistente@email.com\",\n  \"login\": \"usuario.inexistente\",\n  \"tipoUsuario\": \"CLIENTE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "999999"
+          ]
+        },
+        "description": "Tenta atualizar dados de usuario inexistente. Resposta esperada: 404 Not Found com ProblemDetail."
+      },
+      "response": []
+    },
+    {
+      "name": "Busca de usuarios pelo nome",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios?nome=Joao",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ],
+          "query": [
+            {
+              "key": "nome",
+              "value": "Joao"
+            }
+          ]
+        },
+        "description": "Busca usuarios pelo nome. Resposta esperada: 200 OK com lista de usuarios."
+      },
+      "response": []
+    },
+    {
+      "name": "Lista todos usuarios",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Busca usuarios pelo nome. Resposta esperada: 200 OK com lista de usuarios."
+      },
+      "response": []
+    },
+    {
+      "name": "Validacao de login com sucesso",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"joao.silva\",\n  \"senha\": \"novaSenha123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "login"
+          ]
+        },
+        "description": "Valida login e senha validos. Resposta esperada: 200 OK com true."
+      },
+      "response": []
+    },
+    {
+      "name": "Validacao de login com erro",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"joao.silva\",\n  \"senha\": \"senhaIncorreta\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "login"
+          ]
+        },
+        "description": "Valida credenciais invalidas. Resposta esperada: 401 Unauthorized com ProblemDetail."
+      },
+      "response": []
+    },
+    {
+      "name": "Exclusao de usuario com sucesso",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        },
+        "description": "Atualiza dados cadastrais usando endpoint distinto da troca de senha. Resposta esperada: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "Exclusao de usuario com erro - usuario inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        },
+        "description": "Atualiza dados cadastrais usando endpoint distinto da troca de senha. Resposta esperada: 200 OK."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "usuarioId",
+      "value": "1"
+    }
+  ]
+}
